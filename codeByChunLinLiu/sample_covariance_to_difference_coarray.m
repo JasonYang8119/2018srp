@@ -69,7 +69,7 @@ switch (upper(output_type))
     case 'X_U'
         
         [n1, n2] = ndgrid(S);
-        [U, ~] = weight_function( S, 'U' );
+        [U, ~] = weight_function( S, 'U' );%得到最大长度的子序列
         LEN_U = length(U);
         
         x_U = zeros( LEN_U, 1 );

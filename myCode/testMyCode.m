@@ -1,6 +1,7 @@
 % Sensor locations
 S = [-4:4].';
 % Number of sensors
+[n1,n2] = ndgrid(S);
 LEN_S = length(S);
 %test MUSIC
 %True normalized DOA
