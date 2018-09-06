@@ -7,14 +7,14 @@ S=[(0:N-1)*M,(1:M-1)*N].';  %column-vector,true field array set
 LEN_S = length(S);
 
 %generate sinusoidal sources
-theta_bar = linspace(-60,60,25);  %row-vector,true DOA angel
+theta_bar = linspace(-60,60,5);  %row-vector,true DOA angel
 % Number of sources
 DD = length(theta_bar);
 SNRdB = 0;
 SNAPSHOTS = 2000;
 A_S = exp(2i * pi * S * sind(theta_bar));
 
-Source = sin(2 * pi * randn(DD, SNAPSHOTS));
+Source = randn(DD, SNAPSHOTS);
 Noise = (randn(LEN_S, SNAPSHOTS) + 1i * randn(LEN_S, SNAPSHOTS)) / sqrt(2);
 noise_std = 10^(-SNRdB/20);
 
@@ -41,7 +41,7 @@ end
 R_zz = R_zz/DOF;
 
 %MUSIC algorithm
-[U,S,V]=svd(R_zz);
+[U,Ss,V]=svd(R_zz);
 Un=U(:,DD+1:m);
 
 theta=-60:0.1:60;
@@ -50,9 +50,14 @@ theta=-60:0.1:60;
    Psmoothmusic(ii)=1./abs(a'*Un*Un'*a);
  end
 
-plot(theta,10*log(Psmoothmusic)');
+plot(theta,10*log(Psmoothmusic)','-r');
 xlabel('入射角/度');
 ylabel('谱峰dB');
-legend('FORWARD-SMOOTHNESS-MUSIC');
 title('前向空间平滑MUSIC估计');
+
+ylim=get(gca,'Ylim'); % 获取当前图形的纵轴的范围
+hold on
+plot([theta_bar;theta_bar],ylim,'b--'); % 绘制DOA的参考直线
+legend('FORWARD-SMOOTHNESS-MUSIC','REAL-DOA');
+%ylim 用于绘制y轴的取值范围
 grid on;
