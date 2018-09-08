@@ -1,14 +1,13 @@
 clear all;
 close all;
 clc;
-%Set sensor
+%设置实际阵列
 M = 4; N=5;
-S=[(0:N-1)*M,(1:M-1)*N].';  %column-vector,true field array set
+S=[(0:N-1)*M,(1:M-1)*N].';  
 LEN_S = length(S);
 
-%generate sinusoidal sources
-theta_bar = linspace(-60,60,5);  %row-vector,true DOA angel
-% Number of sources
+%生成源信号
+theta_bar = linspace(-60,60,5);  %实际DOA角度
 DD = length(theta_bar);
 SNRdB = 0;
 SNAPSHOTS = 2000;
@@ -18,19 +17,19 @@ Source = randn(DD, SNAPSHOTS);
 Noise = (randn(LEN_S, SNAPSHOTS) + 1i * randn(LEN_S, SNAPSHOTS)) / sqrt(2);
 noise_std = 10^(-SNRdB/20);
 
-% Array output
+%实际接收信号
 x_S = A_S * Source + noise_std * Noise;
 
-%autocorrelation 
-R_S1 = x_S * x_S' / SNAPSHOTS;    %minus
-R_S2 = x_S * x_S.' / SNAPSHOTS;    %add_positive
-R_S3 = conj(x_S) * x_S' / SNAPSHOTS;    %add_negtive
+%算法处理
+R_S1 = x_S * x_S' / SNAPSHOTS;    %相减
+R_S2 = x_S * x_S.' / SNAPSHOTS;    %正相加
+R_S3 = conj(x_S) * x_S' / SNAPSHOTS;    %负相加
 vecULA = getMaxULA(S);
 
-%Rebuild Z
+%重建Z向量
 Z_vec = (rebuildZ([R_S1,R_S2,R_S3],vecULA,S)).';
 
-%spatial smoothing technique
+%空间平滑处理
 DOF = 29;  %子阵个数
 m = length(Z_vec) - DOF + 1;  %每个子阵阵元数
 R_zz = zeros(m,m);
