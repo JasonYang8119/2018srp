@@ -1,4 +1,7 @@
-Written by Chun-Lin Liu
+use co-prime array and spatial smooth process to test MUSIC algorithm
+reference code from internet and Chun-Lin Liu
+--------------------------------------------------------------------------------------------------------
+original code Written by Chun-Lin Liu
 E-mail: cl.liu@caltech.edu
 Project website:
 http://systems.caltech.edu/dsp/students/clliu/coarray.html
